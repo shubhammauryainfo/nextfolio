@@ -1,100 +1,115 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const blogs = [
+    {
+      id: 1,
+      title: 'How to Build a Full-Stack App',
+      description: 'Step-by-step guide to building a modern full-stack web application.',
+      image: '/blog/fullstack.jpeg',
+      link: '#',
+    },
+    {
+      id: 2,
+      title: 'Understanding JavaScript Closures',
+      description: 'Deep dive into closures and their practical uses in JavaScript.',
+      image: '/blog/js.jpeg',
+      link: '#',
+    },
+    {
+      id: 3,
+      title: 'Top 10 Tailwind CSS Tips',
+      description: 'Enhance your workflow with these Tailwind CSS tips and tricks.',
+      image: '/blog/tailwind.jpeg',
+      link: '#',
+    },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+  return (
+    <div className="min-h-screen bg-gray-50 text-gray-800">
+      {/* Hero Section */}
+      <section className="relative flex items-center justify-center h-screen bg-gradient-to-r from-purple-500 to-pink-600">
+        <div className="text-center text-white">
+          <h1 className="text-5xl font-bold mb-4">Welcome to <span className="text-yellow-400">Nextfolio</span></h1>
+          <p className="text-xl mb-6">Your one-stop platform for insightful articles and stories.</p>
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="#blogs"
+            className="px-6 py-3 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow hover:bg-yellow-300"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+            Explore Blogs
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* Recent Blogs Section */}
+      <section id="blogs" className="py-16 px-8 md:px-20 lg:px-32">
+        <h2 className="text-4xl font-bold text-center mb-8">Recent Blogs</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogs.map((blog) => (
+            <div
+              key={blog.id}
+              className="p-6 bg-white shadow rounded-lg hover:shadow-xl transition duration-300"
+            >
+              <Image
+                src={blog.image}
+                alt={blog.title}
+                width={400}
+                height={200}
+                className="rounded mb-4 object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+              <h3 className="text-2xl font-semibold mb-4">{blog.title}</h3>
+              <p className="text-gray-600 mb-4">{blog.description}</p>
+              <a
+                href={blog.link}
+                className="text-blue-500 hover:underline"
+              >
+                Read More
+              </a>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Categories Section */}
+      <section id="categories" className="py-16 bg-gray-100">
+        <h2 className="text-4xl font-bold text-center mb-8">Categories</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 px-8 md:px-20 lg:px-32">
+          {[...Array(8).keys()].map((index) => (
+            <div
+              key={index}
+              className={`p-4 bg-gray-${200 + index} shadow-lg rounded-lg flex flex-col items-center justify-center font-semibold text-gray-800 hover:scale-105 transition-transform duration-300`}
+            >
+              <span className="md:text-xl text-md mb-2">Category {index + 1}</span>
+              <button className="px-4 py-2 bg-white rounded-lg shadow-md hover:bg-gray-100">Explore</button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="py-16 bg-purple-500 text-white text-center p-2">
+        <h2 className="text-4xl font-bold mb-4">Join Our Community</h2>
+        <p className="text-lg mb-6">Subscribe to our newsletter or start writing your own blogs today!</p>
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <a
+            href="#subscribe"
+            className="px-6 py-3 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow hover:bg-yellow-300"
+          >
+            Subscribe
+          </a>
+          <a
+            href="#write"
+            className="px-6 py-3 bg-white text-purple-500 font-semibold rounded-lg shadow hover:bg-gray-200"
+          >
+            Start Writing
+          </a>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-4 bg-gray-900 text-center text-white">
+        <p>&copy; 2024 Nextfolio. All rights reserved.</p>
       </footer>
     </div>
   );
