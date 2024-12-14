@@ -1,5 +1,5 @@
 import Image from 'next/image';
-
+import Link from 'next/link';
 export default function Home() {
   const blogs = [
     {
@@ -98,14 +98,15 @@ export default function Home() {
           >
             Subscribe
           </a>
-          <a
-            href="#write"
+          <Link
+            href="/login"
             className="px-6 py-3 bg-white text-purple-500 font-semibold rounded-lg shadow hover:bg-gray-200"
           >
             Start Writing
-          </a>
+          </Link>
         </div>
       </section>
+        
 
       {/* Footer */}
       <footer className="py-4 bg-gray-900 text-center text-white">
