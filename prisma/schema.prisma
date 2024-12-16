@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql" // Change to "postgresql" if using PostgreSQL
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -12,6 +12,16 @@ model Blog {
   title       String
   content     String
   author      String
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  password    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-let pool: mysql.Pool | null = null;
+export let pool: mysql.Pool | null = null;
 
 // Create and export a reusable connection pool
 export const createPool = () => {
