@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Layout from "@/components/Layout";
 
 export default function Dashboard() {
   const categories = [
@@ -34,28 +35,9 @@ export default function Dashboard() {
   ];
 
   return (
+    <Layout>
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
-        {/* Sidebar Navigation */}
-        <aside className="w-64 bg-gray-800 text-white min-h-screen">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold">Dashboard</h2>
-            <nav className="mt-8 space-y-4">
-              <a href="#" className="block px-4 py-2 rounded-lg hover:bg-gray-700">
-                Home
-              </a>
-              <a href="/dashboard/posts" className="block px-4 py-2 rounded-lg hover:bg-gray-700">
-                Posts
-              </a>
-              <a href="/dashboard/categories" className="block px-4 py-2 rounded-lg hover:bg-gray-700">
-                Categories
-              </a>
-              <a href="/dashboard/settings" className="block px-4 py-2 rounded-lg hover:bg-gray-700">
-                Settings
-              </a>
-            </nav>
-          </div>
-        </aside>
 
         {/* Main Content Area */}
         <main className="flex-1 p-6">
@@ -86,5 +68,6 @@ export default function Dashboard() {
         </main>
       </div>
     </div>
+    </Layout>
   );
 }

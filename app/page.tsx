@@ -28,10 +28,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
       {/* Hero Section */}
-      <section className="relative flex items-center justify-center h-screen bg-gradient-to-r from-purple-500 to-pink-600">
+      <section className="relative flex items-center justify-center h-screen bg-gradient-to-r from-pink-500 to-purple-600">
         <div className="text-center text-white">
-          <h1 className="text-5xl font-bold mb-4">Welcome to <span className="text-yellow-400">Nextfolio</span></h1>
-          <p className="text-xl mb-6">Your one-stop platform for insightful articles and stories.</p>
+          <h1 className="text-5xl font-bold mb-4">
+            <img src="/logo.png" alt="" />
+          </h1>
+         
           <a
             href="#blogs"
             className="px-6 py-3 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow hover:bg-yellow-300"
