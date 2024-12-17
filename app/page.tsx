@@ -31,7 +31,7 @@ export default function Home() {
       <section className="relative flex items-center justify-center h-screen bg-gradient-to-r from-pink-500 to-purple-600">
         <div className="text-center text-white">
           <h1 className="text-5xl font-bold mb-4">
-            <img src="/logo.png" alt="" />
+          <Image src="/logo.png" alt="Example Image" />
           </h1>
          
           <a

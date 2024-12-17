@@ -1,18 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI ;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env');
 }
 
-let cached = (global as any).mongoose;
-
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
+// Define a type for the global cached object
+interface MongooseCache {
+  conn: Mongoose | null;
+  promise: Promise<Mongoose> | null;
 }
 
-export const connectToDatabase = async () => {
+// Use globalThis to access the global scope
+declare global {
+  // eslint-disable-next-line no-var
+  var mongoose: MongooseCache | undefined;
+}
+
+const cached: MongooseCache = globalThis.mongoose || { conn: null, promise: null };
+
+export const connectToDatabase = async (): Promise<Mongoose> => {
   if (cached.conn) {
     return cached.conn;
   }
@@ -29,5 +37,6 @@ export const connectToDatabase = async () => {
   }
 
   cached.conn = await cached.promise;
+  globalThis.mongoose = cached; // Store the cache globally
   return cached.conn;
 };

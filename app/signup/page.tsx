@@ -39,7 +39,7 @@ export default function SignUp() {
       });
 
       if (res.ok) {
-        const result = await res.json();
+      
 
         // Show success alert
         Swal.fire({

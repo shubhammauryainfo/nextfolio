@@ -52,7 +52,7 @@ export default function Login() {
       });
 
       if (res.ok) {
-        const result = await res.json();
+       
 
         // Show success alert
         Swal.fire({
