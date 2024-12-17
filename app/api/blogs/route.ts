@@ -1,46 +1,50 @@
-import { NextResponse } from "next/server";
-import { createPool } from "@/lib/db";
+import { NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/mongoose';
+import { Blog } from '@/models/Blog';
 
-// GET: Fetch all blog
+// GET: Fetch all blogs
 export async function GET() {
   try {
-    const pool = createPool(); // Assuming createPool initializes the connection
-    const [blog] = await pool.query("SELECT * FROM blog");
-    return NextResponse.json(blog, { status: 200 });
+    await connectToDatabase();
+    const blogs = await Blog.find({});
+    return NextResponse.json(blogs, { status: 200 });
   } catch (error) {
-    console.error("Error fetching blog:", error);
-    return NextResponse.json({ error: "Failed to fetch blog" }, { status: 500 });
+    console.error('Error fetching blogs:', error);
+    return NextResponse.json(
+      { message: 'Failed to fetch blogs' },
+      { status: 500 }
+    );
   }
 }
 
 // POST: Create a new blog
 export async function POST(req: Request) {
   try {
-    const pool = createPool(); // Assuming createPool initializes the connection
-    const { title, content, author, category } = await req.json();
+    const body = await req.json();
+    const { title, content, author, category } = body;
 
-    // Validate required fields
     if (!title || !content || !author || !category) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+      return NextResponse.json(
+        { message: 'All fields are required' },
+        { status: 400 }
+      );
     }
 
-    const query =
-      "INSERT INTO blog (title, content, author, category, createdAt, updatedAt) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))";
-    const [result] = await pool.query(query, [title, content, author, category]);
-
-    const newBlog = {
-      id: result.insertId,
+    await connectToDatabase();
+    const newBlog = new Blog({
       title,
       content,
       author,
       category,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    });
 
-    return NextResponse.json(newBlog, { status: 201 });
+    const savedBlog = await newBlog.save();
+    return NextResponse.json(savedBlog, { status: 201 });
   } catch (error) {
-    console.error("Error creating blog:", error);
-    return NextResponse.json({ error: "Failed to create blog" }, { status: 500 });
+    console.error('Error creating blog:', error);
+    return NextResponse.json(
+      { message: 'Failed to create blog' },
+      { status: 500 }
+    );
   }
 }

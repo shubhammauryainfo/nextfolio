@@ -1,20 +1,20 @@
 import { NextResponse } from "next/server";
-import { createPool } from "@/lib/db";
-
-const pool = createPool(); // Initialize the MySQL connection pool
+import { connectToDatabase } from "@/lib/mongoose";
+import { Blog } from "@/models/Blog";
 
 // GET: Fetch a single blog by ID
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
     const blogId = params.id;
+    await connectToDatabase();
 
-    const [blogs] = await pool.query("SELECT * FROM blog WHERE id = ?", [blogId]);
+    const blog = await Blog.findById(blogId);
 
-    if (blogs.length === 0) {
+    if (!blog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
-    return NextResponse.json(blogs[0], { status: 200 });
+    return NextResponse.json(blog, { status: 200 });
   } catch (error) {
     console.error("Error fetching blog:", error);
     return NextResponse.json({ error: "Failed to fetch blog" }, { status: 500 });
@@ -32,15 +32,19 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
-    const query =
-      "UPDATE blog SET title = ?, content = ?, author = ?, category = ? WHERE id = ?";
-    const [result] = await pool.query(query, [title, content, author, category, blogId]);
+    await connectToDatabase();
 
-    if (result.affectedRows === 0) {
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { title, content, author, category, updatedAt: new Date() },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedBlog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: "Blog updated successfully" }, { status: 200 });
+    return NextResponse.json({ message: "Blog updated successfully", blog: updatedBlog }, { status: 200 });
   } catch (error) {
     console.error("Error updating blog:", error);
     return NextResponse.json({ error: "Failed to update blog" }, { status: 500 });
@@ -51,11 +55,11 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
     const blogId = params.id;
+    await connectToDatabase();
 
-    const query = "DELETE FROM blog WHERE id = ?";
-    const [result] = await pool.query(query, [blogId]);
+    const deletedBlog = await Blog.findByIdAndDelete(blogId);
 
-    if (result.affectedRows === 0) {
+    if (!deletedBlog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
     }
 
