@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Footer from '@/components/Footer';
 export default function Home() {
   const blogs = [
     {
@@ -31,7 +32,7 @@ export default function Home() {
       <section className="relative flex items-center justify-center h-screen bg-gradient-to-r from-pink-500 to-purple-600">
         <div className="text-center text-white">
           <h1 className="text-5xl font-bold mb-4">
-          <Image src="/logo.png" alt="Example Image" />
+          <Image src="/logo.png" alt="Example Image" width={700} height={200}  />
           </h1>
          
           <a
@@ -111,9 +112,7 @@ export default function Home() {
         
 
       {/* Footer */}
-      <footer className="py-4 bg-gray-900 text-center text-white">
-        <p>&copy; 2024 Nextfolio. All rights reserved.</p>
-      </footer>
+     <Footer/>
     </div>
   );
 }
