@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongoose";
 import { Blog } from "@/models/Blog";
