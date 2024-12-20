@@ -1,4 +1,4 @@
-import Header from "./Header";
+import Header from "./dashHeader";
 import Footer from "./Footer";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {

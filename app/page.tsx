@@ -34,13 +34,9 @@ export default function Home() {
           <h1 className="text-5xl font-bold mb-4">
           <Image src="/logo.png" alt="Example Image" width={700} height={200}  />
           </h1>
-         
-          <a
-            href="#blogs"
-            className="px-6 py-3 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow hover:bg-yellow-300"
-          >
-            Explore Blogs
-          </a>
+         <Link href="#blogs" className='px-6 py-3 m-1 bg-[#9f36e0] text-white-800 font-semibold rounded-lg  shadow hover:bg-transparent hover:text-yellow-400 transition duration-300'>Explore Blogs</Link>
+          <Link href={"/about"} className='px-6 py-3 m-1 bg-[#d442af] text-white-800 font-semibold rounded-lg  shadow hover:bg-transparent hover:text-yellow-400 transition duration-300'>About Us</Link>
+        
         </div>
       </section>
 

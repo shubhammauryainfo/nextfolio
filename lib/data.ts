@@ -1,6 +1,31 @@
 import { AiOutlineUser, AiOutlineBook } from "react-icons/ai";
 import { VscFeedback } from "react-icons/vsc";
 import { MdOutlineComment,  MdSpaceDashboard } from "react-icons/md";
+import { FaHome, FaInfoCircle, FaBlog, FaEnvelope } from "react-icons/fa";
+
+export const navigationLinks = [
+  {
+    name: "Home",
+    href: "/",
+    icon: FaHome,
+  },
+  {
+    name: "About",
+    href: "/about",
+    icon: FaInfoCircle,
+  },
+  {
+    name: "Blogs",
+    href: "/blogs",
+    icon: FaBlog,
+  },
+  {
+    name: "Contact",
+    href: "/contact",
+    icon: FaEnvelope,
+  },
+];
+
 
 
 export const dashboardNav = [

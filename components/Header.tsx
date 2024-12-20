@@ -1,45 +1,27 @@
-import { dashboardNav } from "@/lib/data";
 import Link from "next/link";
-import { MdLogout } from "react-icons/md";
+import { navigationLinks } from "@/lib/data";
+
 export default function Header() {
   return (
-    <header className="bg-gray-800 text-white shadow-md">
-      <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-        {/* Logo or Brand */}
-        <Link href="/">
-          <h1 className="text-2xl font-bold">NEXTFOLIO</h1>
-        </Link>
-         
+    <header className="bg-white shadow sticky top-0 z-50">
+      <div className="container mx-auto flex justify-between items-center py-4 px-6">
+        {/* Logo */}
+        <div className="text-2xl font-bold text-purple-600">
+          <Link href="/">NEXTFOLIO</Link>
+        </div>
 
-        {/* Navigation Menu */}
-        <nav>
-          <ul className="flex space-x-6">
-            {dashboardNav.map((item) => (
-              <li key={item.label}>
-                <a
-                  href={item.path}
-                  className="flex items-center hover:text-gray-400 transition-colors"
-                >
-                  {/* Render Icon */}
-                  <span className="mr-1 text-lg">
-                    <item.icon />
-                  </span>
-                  <span>{item.label}</span>
-                </a>
-              </li>
-            ))}
-               <li>
-                <a
-                  href="/logout"
-                  className="flex items-center hover:text-gray-400 transition-colors bg-red-600 hover:bg-red-500 px-1 rounded">
-                
-                  <span className="mr-1 text-lg">
-                    <MdLogout />
-                  </span>
-                  <span>Logout</span>
-                </a>
-              </li>
-          </ul>
+        {/* Navigation */}
+        <nav className="flex space-x-6">
+          {navigationLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="flex items-center space-x-2 text-gray-700 hover:text-purple-600 transition"
+            >
+              <link.icon className="text-xl" />
+              <span>{link.name}</span>
+            </Link>
+          ))}
         </nav>
       </div>
     </header>
