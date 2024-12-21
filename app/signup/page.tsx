@@ -10,6 +10,7 @@ export default function SignUp() {
     password: '',
   });
 
+  console.log(formData);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -34,6 +35,7 @@ export default function SignUp() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
         },
         body: JSON.stringify(formData),
       });
