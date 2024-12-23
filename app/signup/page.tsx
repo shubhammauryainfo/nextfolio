@@ -1,16 +1,18 @@
 "use client"; // This directive tells Next.js to treat this file as a client component
 
-import { useState } from 'react';
-import Swal from 'sweetalert2';
-import Link from 'next/link';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import Link from "next/link";
+
 export default function SignUp() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
+    name: "",
+    email: "",
+    password: "",
   });
 
-  console.log(formData);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
@@ -21,8 +23,8 @@ export default function SignUp() {
 
     // Show loading alert
     Swal.fire({
-      title: 'Creating Account...',
-      text: 'Please wait while we create your account.',
+      title: "Creating Account...",
+      text: "Please wait while we create your account.",
       allowOutsideClick: false,
       showConfirmButton: false,
       didOpen: () => {
@@ -31,48 +33,49 @@ export default function SignUp() {
     });
 
     try {
-      const res = await fetch('/api/users', {
-        method: 'POST',
+      const res = await fetch("/api/users", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': process.env.NEXT_PUBLIC_API_KEY || '',
+          "Content-Type": "application/json",
+          "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "",
         },
         body: JSON.stringify(formData),
       });
 
       if (res.ok) {
-      
-
         // Show success alert
         Swal.fire({
-          title: 'Success!',
-          text: 'Your account has been created successfully.',
-          icon: 'success',
-          confirmButtonText: 'OK',
+          title: "Success!",
+          text: "Your account has been created successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          // Redirect to login page
+          router.push("/login");
         });
 
         // Reset form fields
-        setFormData({ name: '', email: '', password: '' });
+        setFormData({ name: "", email: "", password: "" });
       } else {
         const error = await res.json();
 
         // Show error alert with API-provided error message
         Swal.fire({
-          title: 'Error',
-          text: error.error || 'Failed to create account. Please try again.',
-          icon: 'error',
-          confirmButtonText: 'OK',
+          title: "Error",
+          text: error.error || "Failed to create account. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
         });
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
 
       // Show error alert for unexpected errors
       Swal.fire({
-        title: 'Error',
-        text: 'An unexpected error occurred. Please try again later.',
-        icon: 'error',
-        confirmButtonText: 'OK',
+        title: "Error",
+        text: "An unexpected error occurred. Please try again later.",
+        icon: "error",
+        confirmButtonText: "OK",
       });
     }
   };
@@ -145,7 +148,7 @@ export default function SignUp() {
         </form>
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <Link href="/login" className="text-blue-600 font-medium hover:underline">
               Sign in
             </Link>

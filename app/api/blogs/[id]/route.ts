@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongoose";
 import { Blog } from "@/models/Blog";
@@ -7,10 +6,10 @@ import { Blog } from "@/models/Blog";
 // GET: Fetch a single blog by ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } } // Use 'id' to match [id] in the file name
 ) {
   try {
-    const { id } = await params; // Await params before destructuring
+    const { id } = params;
     await connectToDatabase();
 
     const blog = await Blog.findById(id);
@@ -32,7 +31,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params; // Await params before destructuring
+    const { id } = params;
     const { title, content, author, category } = await req.json();
 
     if (!title || !content || !author || !category) {
@@ -67,7 +66,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params; // Await params before destructuring
+    const { id } = params;
     await connectToDatabase();
 
     const deletedBlog = await Blog.findByIdAndDelete(id);
