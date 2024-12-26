@@ -30,10 +30,15 @@ export const connectToDatabase = async (): Promise<Mongoose> => {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, options).then((mongoose) => {
-      console.log('MongoDB connected successfully');
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(MONGODB_URI, options)
+      .then((mongoose) => {
+        console.log('MongoDB connected successfully');
+        return mongoose;
+      })
+      .catch((error) => {
+        console.error('MongoDB connection error:', error);
+        throw error;
+      });
   }
 
   cached.conn = await cached.promise;

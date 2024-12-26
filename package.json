@@ -35,5 +35,10 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
     "@eslint/eslintrc": "^3"
+  },
+  "compilerOptions": {
+    "jsx": "preserve",
+    "strict": true,
+    "esModuleInterop": true
   }
 }

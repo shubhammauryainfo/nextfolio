@@ -2,17 +2,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongoose";
 import { Blog } from "@/models/Blog";
+import mongoose from "mongoose";
 
-// GET: Fetch a single blog by ID
+/**
+ * Retrieves a blog post by its slug
+ * @param req - The Next.js request object
+ * @param params - Route parameters containing the blog slug
+ * @returns {Promise<NextResponse>} The blog post data or error response
+ */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } } // Use 'id' to match [id] in the file name
+  { params }: { params: { slug: string } } // Changed 'id' to 'slug'
 ) {
   try {
-    const { id } = params;
+    const { slug } = params; // Changed 'id' to 'slug'
     await connectToDatabase();
 
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findOne({ slug }); // Changed to find by slug
 
     if (!blog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
@@ -20,28 +26,39 @@ export async function GET(
 
     return NextResponse.json(blog, { status: 200 });
   } catch (error) {
+    if (error instanceof mongoose.Error.CastError) {
+      return NextResponse.json({ error: "Invalid slug format" }, { status: 400 }); // Updated error message
+    }
     console.error("Error fetching blog:", error);
     return NextResponse.json({ error: "Failed to fetch blog" }, { status: 500 });
   }
 }
 
-// PUT: Update a blog by ID
+// PUT: Update a blog by slug
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { slug: string } } // Changed 'id' to 'slug'
 ) {
   try {
-    const { id } = params;
+    const { slug } = params; // Changed 'id' to 'slug'
     const { title, content, author, category } = await req.json();
+    
+    // Sanitize inputs
+    const sanitizedData = {
+      title: title?.trim(),
+      content: content?.trim(),
+      author: author?.trim(),
+      category: category?.trim()
+    };
 
-    if (!title || !content || !author || !category) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    if (Object.values(sanitizedData).some(val => !val)) {
+      return NextResponse.json({ error: "All fields are required and cannot be empty" }, { status: 400 });
     }
 
     await connectToDatabase();
 
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      id,
+    const updatedBlog = await Blog.findOneAndUpdate( // Changed to find by slug
+      { slug },
       { title, content, author, category, updatedAt: new Date() },
       { new: true, runValidators: true }
     );
@@ -60,16 +77,16 @@ export async function PUT(
   }
 }
 
-// DELETE: Delete a blog by ID
+// DELETE: Delete a blog by slug
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { slug: string } } // Changed 'id' to 'slug'
 ) {
   try {
-    const { id } = params;
+    const { slug } = params; // Changed 'id' to 'slug'
     await connectToDatabase();
 
-    const deletedBlog = await Blog.findByIdAndDelete(id);
+    const deletedBlog = await Blog.findOneAndDelete({ slug }); // Changed to find by slug
 
     if (!deletedBlog) {
       return NextResponse.json({ error: "Blog not found" }, { status: 404 });
