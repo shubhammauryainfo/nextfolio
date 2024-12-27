@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { BiSupport } from "react-icons/bi";
 import { VscTools } from "react-icons/vsc";
 import { FaPeopleGroup } from "react-icons/fa6";
-
+import Link from "next/link";
 
 
 export default function About() {
@@ -21,7 +21,7 @@ export default function About() {
               Welcome to <strong>NEXTFOLIO</strong>, your ultimate tech blogging and portfolio platform. Our mission is to empower developers, tech enthusiasts, and professionals to showcase their skills, share insights, and connect with a global community.
             </p>
             <p className="text-lg leading-relaxed mb-4">
-              At <strong>NEXTFOLIO</strong>, we believe in the power of collaboration and knowledge-sharing. Whether you're exploring the latest tech trends, creating stunning portfolios, or diving deep into coding tutorials, our platform is designed to inspire and support you every step of the way.
+              At <strong>NEXTFOLIO</strong>, we believe in the power of collaboration and knowledge-sharing. Whether you&apos;re exploring the latest tech trends, creating stunning portfolios, or diving deep into coding tutorials, our platform is designed to inspire and support you every step of the way.
             </p>
             <p className="text-lg leading-relaxed">
               Join us as we build a vibrant ecosystem where innovation meets creativity. Together, we can shape the future of technology, one project at a time.
@@ -82,18 +82,18 @@ export default function About() {
           Start your journey today. Explore blogs, share your projects, or connect with like-minded innovators.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <a
+          <Link
             href="/blogs"
             className="px-6 py-3 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow hover:bg-yellow-300"
           >
             Explore Blogs
-          </a>
-          <a
+         </Link>
+          <Link
             href="/contact"
             className="px-6 py-3 bg-white text-purple-500 font-semibold rounded-lg shadow hover:bg-gray-200"
           >
             Contact Us
-          </a>
+          </Link>
         </div>
       </section>
 

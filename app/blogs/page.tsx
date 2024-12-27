@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Image from "next/image";
 
-// Import the API key from environment variables
-const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 
 interface Blog {
   id: number;
@@ -42,7 +41,7 @@ export default function BlogList(): JSX.Element {
     };
 
     fetchBlogs();
-  }, []);
+  }, [apiKey]); // Added apiKey as a dependency to useEffect
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -71,10 +70,12 @@ export default function BlogList(): JSX.Element {
           key={blog.slug} // Ensure each child has a unique key
           className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105"
         >
-          <img
+          <Image
             src={blog.image_Url}
             alt={blog.title}
-            className="w-full h-52 object-cover rounded-t-lg"
+            width={500}
+            height={300}
+            className="object-cover rounded-t-lg"
           />
           <div className="p-6">
             <h3 className="text-xl font-bold text-gray-800">

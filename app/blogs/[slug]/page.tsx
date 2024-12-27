@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import React, { useState, useEffect } from "react";
@@ -192,10 +192,12 @@ const BlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
           {blog.image_Url && (
-            <img
+            <Image
               src={blog.image_Url}
               alt={blog.title}
-              className="w-full h-64 object-cover rounded-lg"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
             />
           )}
           <p className="text-gray-700 leading-relaxed">{blog.content}</p>
