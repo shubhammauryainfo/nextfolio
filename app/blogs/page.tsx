@@ -31,9 +31,9 @@ export default function BlogList(): JSX.Element {
           throw new Error("Failed to fetch blogs");
         }
         const data: Blog[] = await res.json();
-        // Sort blogs in reverse order to show the latest ones first
-        const sortedBlogs = data.sort((a, b) => b.id - a.id);
-        setBlogs(sortedBlogs);
+        // Fetch blogs in reverse order to show the latest ones first
+        const reversedBlogs = data.reverse();
+        setBlogs(reversedBlogs);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       } finally {
@@ -68,13 +68,13 @@ export default function BlogList(): JSX.Element {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {blogs.map((blog) => (
         <div
-          key={blog.id} // Ensure each child has a unique key
+          key={blog.slug} // Ensure each child has a unique key
           className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105"
         >
           <img
             src={blog.image_Url}
             alt={blog.title}
-            className="w-full h-48 object-cover rounded-t-lg"
+            className="w-full h-52 object-cover rounded-t-lg"
           />
           <div className="p-6">
             <h3 className="text-xl font-bold text-gray-800">

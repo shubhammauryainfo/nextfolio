@@ -1,73 +1,80 @@
-import React from 'react';
-import Image from 'next/image';
-import Layout from "@/components/Layout";
+'use client';
+import React, { useState, useEffect } from "react";
+import Header from "@/components/dashHeader";
+import Footer from "@/components/Footer";
 
-export default function Dashboard() {
-  const categories = [
-    { id: 1, name: 'Tech', posts: 42 },
-    { id: 2, name: 'Lifestyle', posts: 35 },
-    { id: 3, name: 'Education', posts: 28 },
-    { id: 4, name: 'Health', posts: 22 },
-  ];
+// Function to fetch and count data from API
+async function fetchDataCount(endpoint: string) {
+  const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+  const response = await fetch(`/api/${endpoint}`, {
+    headers: {
+      "x-api-key": apiKey,
+    },
+  });
 
-  const recentPosts = [
-    {
-      id: 1,
-      title: 'How to Build a Full-Stack App',
-      excerpt: 'A complete guide on building a modern full-stack application.',
-      image: '/blog/fullstack.jpeg',
-      date: 'Dec 10, 2024',
-    },
-    {
-      id: 2,
-      title: 'Understanding JavaScript Closures',
-      excerpt: 'In-depth explanation of closures and how to use them effectively.',
-      image: '/blog/js.jpeg',
-      date: 'Dec 8, 2024',
-    },
-    {
-        id: 3,
-        title: 'Top 10 Tailwind CSS Tips',
-        description: 'Enhance your workflow with these Tailwind CSS tips and tricks.',
-        image: '/blog/tailwind.jpeg',
-        link: '#',
-      },
-  ];
+  if (response.ok) {
+    const data = await response.json();
+    return data.length; // Count the number of items in the array
+  }
+
+  return 0;
+}
+
+const Dashboard = () => {
+  const [blogsCount, setBlogsCount] = useState(0);
+  const [commentsCount, setCommentsCount] = useState(0);
+  const [feedbackCount, setFeedbackCount] = useState(0);
+  const [usersCount, setUsersCount] = useState(0);
+
+  useEffect(() => {
+    async function loadCounts() {
+      const [blogs, comments, feedbacks, users] = await Promise.all([
+        fetchDataCount("blogs"),
+        fetchDataCount("comments"),
+        fetchDataCount("feedbacks"),
+        fetchDataCount("users")
+      ]);
+
+      setBlogsCount(blogs);
+      setCommentsCount(comments);
+      setFeedbackCount(feedbacks);
+      setUsersCount(users);
+    }
+    loadCounts();
+  }, []);
 
   return (
-    <Layout>
-    <div className="min-h-screen bg-gray-50">
-      <div className="flex">
+    <div>
+      <Header />
+      <div className="container mx-auto px-4 py-10">
+        <h1 className="text-4xl font-bold text-gray-800 mb-6">Dashboard</h1>
 
-        {/* Main Content Area */}
-        <main className="flex-1 p-6">
-          <h1 className="text-3xl font-bold text-gray-800">Recent Posts</h1>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentPosts.map(post => (
-              <div key={post.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
-                <Image src={post.image} alt={post.title} width={400} height={250} />
-                <div className="p-4">
-                  <h2 className="text-xl font-bold">{post.title}</h2>
-                  <p className="text-gray-600 mt-2">{post.excerpt}</p>
-                  <p className="text-sm text-gray-500 mt-2">{post.date}</p>
-                  <a href="#" className="block text-blue-500 hover:underline mt-4">Read More</a>
-                </div>
-              </div>
-            ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-800">Total Blogs</h2>
+            <p className="text-2xl font-bold text-gray-800">{blogsCount}</p>
           </div>
 
-          <h2 className="mt-12 text-3xl font-bold text-gray-800">Categories</h2>
-          <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-6">
-            {categories.map(category => (
-              <div key={category.id} className="bg-gray-100 rounded-lg p-4 shadow-lg">
-                <h3 className="text-xl font-semibold text-gray-800">{category.name}</h3>
-                <p className="text-gray-600 mt-2">Posts: {category.posts}</p>
-              </div>
-            ))}
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-800">Total Comments</h2>
+            <p className="text-2xl font-bold text-gray-800">{commentsCount}</p>
           </div>
-        </main>
+
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-800">Total Feedback</h2>
+            <p className="text-2xl font-bold text-gray-800">{feedbackCount}</p>
+          </div>
+
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-lg font-semibold text-gray-800">Total Users</h2>
+            <p className="text-2xl font-bold text-gray-800">{usersCount}</p>
+          </div>
+        </div>
+
+        <Footer />
       </div>
     </div>
-    </Layout>
   );
-}
+};
+
+export default Dashboard;

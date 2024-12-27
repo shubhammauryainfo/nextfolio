@@ -1,4 +1,5 @@
 "use client";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import React, { useState, useEffect } from "react";
@@ -104,7 +105,7 @@ async function postComment(newComment: Comment): Promise<boolean> {
   }
 }
 
-const BlogPage = ({ params }: { params: { slug: string } }) => {
+const BlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
   const [blog, setBlog] = useState<Blog | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<Comment>({
@@ -119,7 +120,8 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
 
   useEffect(() => {
     async function loadBlog() {
-      const blogData = await fetchBlog(params.slug);
+      const { slug } = await params; // Unwrapping params
+      const blogData = await fetchBlog(slug);
       if (blogData) {
         setBlog(blogData);
         setNewComment((prev) => ({ ...prev, blogTitle: blogData.title }));
@@ -130,7 +132,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
     }
 
     loadBlog();
-  }, [params.slug]);
+  }, [params]);
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -220,7 +222,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
               <p className="text-gray-500">No comments yet.</p>
             )}
           </div>
-          <div className="h-[500px] bg-white p-6 rounded-lg shadow-lg">
+          <div className="h-[500px] bg-white p-6 rounded-lg shadow-lg mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">Leave a Comment</h2>
             <form onSubmit={handleCommentSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -239,23 +241,23 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
                   />
                 </div>
                 <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Phone Number
-                </label>
-                <input
-                  type="text"
-                  id="phone"
-                  placeholder="Enter your phone number"
-                  value={newComment.phone}
-                  onChange={(e) =>
-                    setNewComment({ ...newComment, phone: e.target.value })
-                  }
-                  className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2"
-                />
-              </div>
+                  <label
+                    htmlFor="phone"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    type="text"
+                    id="phone"
+                    placeholder="Enter your phone number"
+                    value={newComment.phone}
+                    onChange={(e) =>
+                      setNewComment({ ...newComment, phone: e.target.value })
+                    }
+                    className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm px-4 py-2"
+                  />
+                </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email Address
@@ -270,7 +272,6 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
                     required
                   />
                 </div>
-              
               </div>
               <div>
                 <label htmlFor="message" className="block text-sm font-medium text-gray-700">
@@ -294,7 +295,7 @@ const BlogPage = ({ params }: { params: { slug: string } }) => {
                   Post Your Comment
                 </button>
               </div>
-            </form>
+            </form >
           </div>
         </div>
       </div>
