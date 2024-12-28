@@ -6,6 +6,7 @@ import Layout from "@/components/Layout";
 import Header from "@/components/Afternav";
 import Table from "@/components/Table";
 import { MdDeleteForever } from "react-icons/md";
+import { TiExport } from "react-icons/ti";
 interface Comment {
   _id: string;
   name: string;
@@ -138,6 +139,31 @@ export default function CommentsPage() {
     setFilteredData(data);
   };
 
+  const exportToCSV = () => {
+    const csvRows = [
+      ["Name", "Email", "Contact", "Title", "Comment", "Date"], // Headers
+      ...data.map((comment) => [
+        comment.name,
+        comment.email,
+        comment.phone,
+        comment.blogTitle,
+        comment.message,
+        new Date(comment.createdAt).toLocaleString(),
+      ]),
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
+
+    const blob = new Blob([csvRows], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "comments_data.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -145,14 +171,14 @@ export default function CommentsPage() {
   return (
     <Layout>
       <Header title="Comments" />
-      <div className="flex justify-center mt-4 mb-4">
+      <div className="flex justify-between items-center mt-4 mb-4">
         <div className="relative flex items-center">
           <input
             type="text"
             value={searchTerm}
             onChange={handleSearch}
             placeholder="Search..."
-            className="border border-gray-300 px-4 py-2 rounded w-80 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="border border-gray-400 px-4 py-2 rounded w-80 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           {searchTerm && (
             <button
@@ -163,6 +189,12 @@ export default function CommentsPage() {
             </button>
           )}
         </div>
+        <button
+          onClick={exportToCSV}
+          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 text-2xl"
+        >
+         <TiExport />
+        </button>
       </div>
       <Table columns={columns} data={filteredData} />
     </Layout>

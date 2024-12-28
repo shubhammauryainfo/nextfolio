@@ -6,7 +6,7 @@ import Layout from "@/components/Layout";
 import Header from "@/components/Afternav";
 import Table from "@/components/Table";
 import { MdDeleteForever } from "react-icons/md";
-
+import { TiExport } from "react-icons/ti";
 interface Feedback {
   _id: string;
   name: string; // Name of the person providing feedback
@@ -140,6 +140,32 @@ export default function FeedbacksPage() {
     setFilteredData(data);
   };
 
+  const exportData = () => {
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        ["Name", "Email", "Phone", "Subject", "Message", "Created At"],
+        ...filteredData.map((item) => [
+          item.name,
+          item.email,
+          item.phone,
+          item.subject,
+          item.message,
+          item.createdAt,
+        ]),
+      ]
+        .map((e) => e.join(","))
+        .join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "feedbacks.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -147,14 +173,14 @@ export default function FeedbacksPage() {
   return (
     <Layout>
       <Header title="Feedbacks" />
-      <div className="flex justify-center mt-4 mb-4">
+      <div className="flex justify-between items-center mt-4 mb-4">
         <div className="relative flex items-center">
           <input
             type="text"
             value={searchTerm}
             onChange={handleSearch}
             placeholder="Search..."
-            className="border border-gray-300 px-4 py-2 rounded w-80 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="border border-gray-400 px-4 py-2 rounded w-80 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           {searchTerm && (
             <button
@@ -165,6 +191,12 @@ export default function FeedbacksPage() {
             </button>
           )}
         </div>
+        <button
+          onClick={exportData}
+          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 text-2xl"
+        >
+         <TiExport />
+        </button>
       </div>
       <Table columns={columns} data={filteredData} />
     </Layout>
