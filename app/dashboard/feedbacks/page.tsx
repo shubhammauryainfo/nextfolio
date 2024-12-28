@@ -55,7 +55,7 @@ export default function FeedbacksPage() {
 
       if (response.ok) {
         const feedbackData = await response.json();
-        setData(feedbackData);
+        setData(feedbackData.reverse());
         setFilteredData(feedbackData); // Initialize filteredData
       } else {
         console.error("Failed to fetch feedbacks:", await response.text());

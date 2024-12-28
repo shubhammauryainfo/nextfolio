@@ -54,7 +54,7 @@ export default function CommentsPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setData(data);
+        setData(data.reverse());
         setFilteredData(data); // Initialize filteredData
       } else {
         console.error("Failed to fetch comments:", await response.text());
