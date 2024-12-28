@@ -1,4 +1,5 @@
 
+
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongoose";
 import { Blog } from "@/models/Blog";
@@ -11,6 +12,7 @@ import mongoose from "mongoose";
  */
 export async function GET(
   req: NextRequest,
+ 
   context: { params: { slug: string } }
 ) {
   try {

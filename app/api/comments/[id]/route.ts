@@ -5,9 +5,9 @@ import { Comment } from "@/models/Comment";
 // GET: Fetch a single comment by ID
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const { id } = params;
+  const { id } = await context.params; // Awaiting params
 
   try {
     await connectToDatabase();
@@ -33,9 +33,9 @@ export async function GET(
 // PUT: Update a comment by ID
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const { id } = params;
+  const { id } = await context.params; // Awaiting params
 
   try {
     const body = await request.json();
@@ -77,9 +77,9 @@ export async function PUT(
 // DELETE: Remove a comment by ID
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const { id } = params;
+  const { id } = await context.params; // Awaiting params
 
   try {
     await connectToDatabase();

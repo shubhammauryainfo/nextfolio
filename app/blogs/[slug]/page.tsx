@@ -195,7 +195,8 @@ const BlogPage = ({ params }: { params: Promise<{ slug: string }> }) => {
             <Image
               src={blog.image_Url}
               alt={blog.title}
-              layout="fill"
+             width={500}
+             height={500}
               objectFit="cover"
               className="rounded-lg"
             />

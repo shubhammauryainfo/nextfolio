@@ -73,8 +73,8 @@ export default function BlogList(): JSX.Element {
           <Image
             src={blog.image_Url}
             alt={blog.title}
-            width={500}
-            height={300}
+            width={100}
+            height={100}
             className="object-cover rounded-t-lg"
           />
           <div className="p-6">
