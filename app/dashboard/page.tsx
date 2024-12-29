@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Afternav";
 import Layout from "@/components/Layout";
+import BlogList from "@/components/BlogList";
 
 // Function to fetch and count data from API
 async function fetchDataCount(endpoint: string) {
@@ -47,31 +48,29 @@ const Dashboard = () => {
     <Layout>
       <Header title="Dashboard" />
       <div className="container mx-auto px-4 py-10">
-       
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-800">Total Blogs</h2>
-            <p className="text-2xl font-bold text-gray-800">{blogsCount}</p>
+          <div className="bg-white shadow-md rounded-lg p-6 text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Total Blogs</h2>
+            <p className="text-3xl font-bold text-gray-800">{blogsCount}</p>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-800">Total Comments</h2>
-            <p className="text-2xl font-bold text-gray-800">{commentsCount}</p>
+          <div className="bg-white shadow-md rounded-lg p-6 text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Total Comments</h2>
+            <p className="text-3xl font-bold text-gray-800">{commentsCount}</p>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-800">Total Feedback</h2>
-            <p className="text-2xl font-bold text-gray-800">{feedbackCount}</p>
+          <div className="bg-white shadow-md rounded-lg p-6 text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Total Feedback</h2>
+            <p className="text-3xl font-bold text-gray-800">{feedbackCount}</p>
           </div>
 
-          <div className="bg-white shadow-md rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-gray-800">Total Users</h2>
-            <p className="text-2xl font-bold text-gray-800">{usersCount}</p>
+          <div className="bg-white shadow-md rounded-lg p-6 text-center">
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Total Users</h2>
+            <p className="text-3xl font-bold text-gray-800">{usersCount}</p>
           </div>
         </div>
-
       </div>
+      <BlogList/>
       </Layout>
   );
 };

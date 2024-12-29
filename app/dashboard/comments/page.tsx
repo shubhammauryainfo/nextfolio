@@ -24,7 +24,7 @@ export default function CommentsPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const columns = [
-    { key: "name", label: "Name" },
+    { key: "name", label: "Name" , width:"20px" },
     { key: "email", label: "Email", width:"20px" },
     { key: "phone", label: "Contact" , width:"10px" },
     { key: "blogTitle", label: "Title" , width:"20px" },
@@ -33,6 +33,7 @@ export default function CommentsPage() {
     {
       key: "action",
       label: "Action",
+      width:"5px",
       render: (row: Comment) => (
         <button
           className="px-2 py-1 bg-red-500 text-white text-xl rounded hover:bg-red-600"

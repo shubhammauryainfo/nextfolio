@@ -34,6 +34,7 @@ export default function FeedbacksPage() {
     {
       key: "action",
       label: "Action",
+      width:"4px",
       render: (row: Feedback) => (
         <button
           className="px-2 py-1 bg-red-500 text-white text-xl rounded hover:bg-red-600"

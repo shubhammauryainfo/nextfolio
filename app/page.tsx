@@ -1,30 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Footer from '@/components/Footer';
+import BlogList from '@/components/BlogList';
 export default function Home() {
-  const blogs = [
-    {
-      id: 1,
-      title: 'How to Build a Full-Stack App',
-      description: 'Step-by-step guide to building a modern full-stack web application.',
-      image: '/blog/fullstack.jpeg',
-      link: '#',
-    },
-    {
-      id: 2,
-      title: 'Understanding JavaScript Closures',
-      description: 'Deep dive into closures and their practical uses in JavaScript.',
-      image: '/blog/js.jpeg',
-      link: '#',
-    },
-    {
-      id: 3,
-      title: 'Top 10 Tailwind CSS Tips',
-      description: 'Enhance your workflow with these Tailwind CSS tips and tricks.',
-      image: '/blog/tailwind.jpeg',
-      link: '#',
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
@@ -41,34 +19,7 @@ export default function Home() {
       </section>
 
       {/* Recent Blogs Section */}
-      <section id="blogs" className="py-16 px-8 md:px-20 lg:px-32">
-        <h2 className="text-4xl font-bold text-center mb-8">Recent Blogs</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {blogs.map((blog) => (
-            <div
-              key={blog.id}
-              className="p-6 bg-white shadow rounded-lg hover:shadow-xl transition duration-300"
-            >
-              <Image
-                src={blog.image}
-                alt={blog.title}
-                width={400}
-                height={200}
-                className="rounded mb-4 object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
-              <h3 className="text-2xl font-semibold mb-4">{blog.title}</h3>
-              <p className="text-gray-600 mb-4">{blog.description}</p>
-              <a
-                href={blog.link}
-                className="text-blue-500 hover:underline"
-              >
-                Read More
-              </a>
-            </div>
-          ))}
-        </div>
-      </section>
+     <BlogList/>
 
       {/* Categories Section */}
       <section id="categories" className="py-16 bg-gray-100">
