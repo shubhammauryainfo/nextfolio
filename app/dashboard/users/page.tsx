@@ -8,6 +8,7 @@ import Table from "@/components/Table";
 import { MdDeleteForever, MdEdit } from "react-icons/md";
 import { TiExport } from "react-icons/ti";
 import { IoMdPersonAdd } from "react-icons/io";
+import { format } from 'date-fns'; // Import date-fns for date formatting
 interface User {
   _id: string;
   name: string;
@@ -34,10 +35,12 @@ export default function UsersPage() {
   const columns = [
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
-    { key: "createdAt", label: "Created At" },
+    { key: "createdAt", label: "Created At", render: (row: User) => format(new Date(row.createdAt), 'Pp') , width:"20px" },
+    { key: "updatedAt", label: "Updated At", render: (row: User) => format(new Date(row.createdAt), 'Pp'), width:"20px" }, // Format date using date-fns
     {
       key: "action",
       label: "Action",
+      width:"10px",
       render: (row: User) => (
         <div className="flex space-x-2">
           <button
@@ -163,11 +166,12 @@ export default function UsersPage() {
     const csvContent =
       "data:text/csv;charset=utf-8," +
       [
-        ["Name", "Email", "Created At"],
+        ["Name", "Email", "Created At","Time", "Updated At", "Time"],
         ...filteredData.map((item) => [
           item.name,
           item.email,
-          item.createdAt,
+          format(new Date(item.createdAt), 'Pp'),
+          format(new Date(item.updatedAt), 'Pp'),
         ]),
       ]
         .map((e) => e.join(","))
@@ -184,7 +188,8 @@ export default function UsersPage() {
 
   const addOrUpdateUser = async () => {
     try {
-      const response = await fetch("/api/users", {
+      const url = currentUser ? `/api/users/${currentUser._id}` : "/api/users";
+      const response = await fetch(url, {
         method: currentUser ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
@@ -316,7 +321,7 @@ export default function UsersPage() {
                     setFormValues((prev) => ({ ...prev, password: e.target.value }))
                   }
                   className="border border-gray-300 p-2 rounded w-full"
-                  required
+                  required={!currentUser}
                 />
               </div>
               <div className="flex justify-end gap-2">

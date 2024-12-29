@@ -1,26 +1,33 @@
 import React from "react";
 
-interface Column {
+interface Column<T> {
   key: string;
   label: string;
-  render?: (row: Record<string, any>) => React.ReactNode;
+  width?: string; 
+  render?: (row: T) => React.ReactNode; // Accept any row type (e.g., Feedback)
 }
 
-interface TableProps {
-  columns: Column[];
-  data: Record<string, any>[];
+interface TableProps<T> {
+  columns: Column<T>[];  // Columns array now accepts Column<T>
+  data: T[];  // Data is an array of type T (e.g., Feedback)
 }
 
-const Table: React.FC<TableProps> = ({ columns, data }) => {
+const Table = <T extends Record<string, any>>({ columns, data }: TableProps<T>) => {
   return (
     <div className="overflow-x-auto mt-2">
-      <table className="min-w-full table-auto border-collapse border border-gray-300">
+      <table className="min-w-full table-auto border-collapse border border-gray-300" style={{ tableLayout: "fixed" }}>
         <thead>
           <tr className="bg-gray-200 text-left">
             {columns.map((column) => (
               <th
                 key={column.key}
                 className="px-4 py-2 border border-gray-300 font-semibold"
+                style={{
+                  width: column.width || "auto",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
               >
                 {column.label}
               </th>
@@ -38,6 +45,12 @@ const Table: React.FC<TableProps> = ({ columns, data }) => {
                   <td
                     key={column.key}
                     className="px-4 py-2 border border-gray-300"
+                    style={{
+                      width: column.width || "auto",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
                   >
                     {column.render ? column.render(row) : row[column.key]}
                   </td>

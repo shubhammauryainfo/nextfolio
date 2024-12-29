@@ -7,6 +7,7 @@ import Header from "@/components/Afternav";
 import Table from "@/components/Table";
 import { MdDeleteForever } from "react-icons/md";
 import { TiExport } from "react-icons/ti";
+import { format } from 'date-fns';
 interface Feedback {
   _id: string;
   name: string; // Name of the person providing feedback
@@ -28,8 +29,8 @@ export default function FeedbacksPage() {
     { key: "email", label: "Email" },
     { key: "phone", label: "Phone" },
     { key: "subject", label: "Subject" },
-    { key: "message", label: "Message" },
-    { key: "createdAt", label: "Date" },
+    { key: "message", label: "Message"},
+    { key: "createdAt", label: "Date", render: (row: Feedback) => format(new Date(row.createdAt), 'Pp') },
     {
       key: "action",
       label: "Action",
@@ -151,7 +152,7 @@ export default function FeedbacksPage() {
           item.phone,
           item.subject,
           item.message,
-          item.createdAt,
+          format(new Date(item.createdAt), 'Pp'),
         ]),
       ]
         .map((e) => e.join(","))

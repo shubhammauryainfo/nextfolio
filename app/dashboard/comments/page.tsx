@@ -7,6 +7,7 @@ import Header from "@/components/Afternav";
 import Table from "@/components/Table";
 import { MdDeleteForever } from "react-icons/md";
 import { TiExport } from "react-icons/ti";
+import { format } from 'date-fns'; // Import date-fns for date formatting
 interface Comment {
   _id: string;
   name: string;
@@ -24,11 +25,11 @@ export default function CommentsPage() {
 
   const columns = [
     { key: "name", label: "Name" },
-    { key: "email", label: "Email" },
-    { key: "phone", label: "Contact" },
-    { key: "blogTitle", label: "Title" },
+    { key: "email", label: "Email", width:"20px" },
+    { key: "phone", label: "Contact" , width:"10px" },
+    { key: "blogTitle", label: "Title" , width:"20px" },
     { key: "message", label: "Comment" },
-    { key: "createdAt", label: "Date" },
+    { key: "createdAt", label: "Date", width:"10px", render: (row: Comment) => format(new Date(row.createdAt), 'Pp') }, // Format date using date-fns
     {
       key: "action",
       label: "Action",
@@ -148,7 +149,7 @@ export default function CommentsPage() {
         comment.phone,
         comment.blogTitle,
         comment.message,
-        new Date(comment.createdAt).toLocaleString(),
+        format(new Date(comment.createdAt), 'Pp'), // Format date using date-fns
       ]),
     ]
       .map((row) => row.join(","))
