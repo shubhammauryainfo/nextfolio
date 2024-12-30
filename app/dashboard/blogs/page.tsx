@@ -73,11 +73,12 @@ export default function BlogsPage() {
     {
       key: "action",
       label: "Action",
+      width:"10px",
       render: (row: Blog) => (
         <div className="flex space-x-2">
             <Link
             href={`/blogs/${row.slug}`}
-            className="px-2 py-1 bg-blue-500 text-white text-xl rounded hover:bg-blue-600">
+            className="px-2 py-1 bg-yellow-500 text-white text-xl rounded hover:bg-yellow-600">
              
             <PiReadCvLogoDuotone />
             
@@ -445,7 +446,7 @@ export default function BlogsPage() {
                 <label className="block text-sm font-medium text-gray-700">Tags</label>
                 <input
                   type="text"
-                  value={formValues.tags.join(", ")}
+                  value={formValues.tags.join(",")}
                   onChange={(e) => setFormValues({ ...formValues, tags: e.target.value.split(",") })}
                   className="w-full px-4 py-2 border border-gray-300 rounded"
                 />
@@ -525,7 +526,7 @@ export default function BlogsPage() {
                 <label className="block text-sm font-medium text-gray-700">Keywords</label>
                 <input
                   type="text"
-                  value={formValues.keywords ? formValues.keywords.join(", ") : ""}
+                  value={formValues.keywords ? formValues.keywords.join(",") : ""}
                   onChange={(e) => setFormValues({ ...formValues, keywords: e.target.value.split(",") })}
                   className="w-full px-4 py-2 border border-gray-300 rounded"
                 />

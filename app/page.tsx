@@ -12,7 +12,7 @@ export default function Home() {
           <h1 className="text-5xl font-bold mb-4">
           <Image src="/logo.png" alt="Example Image" width={700} height={200}  />
           </h1>
-         <Link href="#blogs" className='px-6 py-3 m-1 bg-[#9f36e0] text-white-800 font-semibold rounded-lg  shadow hover:bg-transparent hover:text-yellow-400 transition duration-300'>Explore Blogs</Link>
+         <Link href="/blogs" className='px-6 py-3 m-1 bg-[#9f36e0] text-white-800 font-semibold rounded-lg  shadow hover:bg-transparent hover:text-yellow-400 transition duration-300'>Explore Blogs</Link>
           <Link href={"/about"} className='px-6 py-3 m-1 bg-[#d442af] text-white-800 font-semibold rounded-lg  shadow hover:bg-transparent hover:text-yellow-400 transition duration-300'>About Us</Link>
         
         </div>
@@ -22,20 +22,43 @@ export default function Home() {
      <BlogList/>
 
       {/* Categories Section */}
-      <section id="categories" className="py-16 bg-gray-100">
-        <h2 className="text-4xl font-bold text-center mb-8">Categories</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 px-8 md:px-20 lg:px-32">
-          {[...Array(8).keys()].map((index) => (
-            <div
-              key={index}
-              className={`p-4 bg-gray-${200 + index} shadow-lg rounded-lg flex flex-col items-center justify-center font-semibold text-gray-800 hover:scale-105 transition-transform duration-300`}
+      <section id="categories" className="py-16 bg-gray-300">
+  <h2 className="text-4xl font-bold text-center text-gray-600 mb-8">Explore Tech Categories</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-8 px-8 md:px-20 lg:px-32">
+    {[
+      { name: 'Web Development', tags: ['React', 'JavaScript', 'HTML', 'Tailwind'] },
+      { name: 'Data Science', tags: ['Python', 'Pandas', 'NumPy', 'Jupyter'] },
+      { name: 'Machine Learning', tags: ['TensorFlow', 'Keras', 'Scikit-Learn', 'AI'] },
+      { name: 'Cybersecurity', tags: ['Ethical Hacking', 'Pen Testing', 'Network Security'] },
+      { name: 'Cloud Computing', tags: ['AWS', 'Azure', 'Google Cloud', 'Docker'] },
+      { name: 'Blockchain', tags: ['Bitcoin', 'Ethereum', 'Solidity', 'Crypto'] },
+      { name: 'Mobile Development', tags: ['React Native', 'Flutter', 'Swift', 'Kotlin'] },
+      { name: 'DevOps', tags: ['CI/CD', 'Jenkins', 'Kubernetes', 'Docker'] },
+    ].map((category, index) => (
+      <div
+        key={index}
+        className="p-6 bg-white shadow-xl rounded-lg flex flex-col items-center justify-center font-semibold text-gray-800 hover:scale-105 transition-all duration-300 transform hover:shadow-2xl"
+      >
+        <span className="text-xl md:text-2xl mb-3">{category.name}</span>
+        <div className="flex flex-wrap justify-center gap-2 mb-4">
+          {category.tags.map((tag, tagIndex) => (
+            <span
+              key={tagIndex}
+              className="px-4 py-1 bg-gray-200 text-sm rounded-full text-gray-700 font-medium hover:bg-gray-300 transition-colors"
             >
-              <span className="md:text-xl text-md mb-2">Category {index + 1}</span>
-              <button className="px-4 py-2 bg-white rounded-lg shadow-md hover:bg-gray-100">Explore</button>
-            </div>
+              {tag}
+            </span>
           ))}
         </div>
-      </section>
+        <button className="px-6 py-2 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-lg shadow-md hover:bg-gradient-to-l transform transition duration-300 ease-in-out">
+          Explore
+        </button>
+      </div>
+    ))}
+  </div>
+</section>
+
+
 
       {/* Call to Action Section */}
       <section className="py-16 bg-purple-500 text-white text-center p-2">

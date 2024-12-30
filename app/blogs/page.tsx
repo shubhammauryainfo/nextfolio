@@ -60,7 +60,7 @@ export default function BlogList(): JSX.Element {
       </section>
 
 {/* Blog Cards */}
-<main className="flex-grow container mx-auto px-4 py-8">
+<main className="flex-grow container mx-auto px-4 bg-slate-100 py-8">
   {loading ? (
     <p className="text-center text-gray-500">Loading blogs...</p>
   ) : blogs.length > 0 ? (
@@ -73,8 +73,8 @@ export default function BlogList(): JSX.Element {
           <Image
             src={blog.image_Url}
             alt={blog.title}
-            width={100}
-            height={100}
+            width={500}
+            height={500}
             className="object-cover rounded-t-lg"
           />
           <div className="p-6">

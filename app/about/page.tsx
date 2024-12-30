@@ -76,7 +76,7 @@ export default function About() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="py-16 bg-purple-500 text-white text-center">
+      <section className="py-16 bg-purple-500 text-white text-center p-4">
         <h2 className="text-3xl font-bold mb-4">Join the NEXTFOLIO Community</h2>
         <p className="text-lg mb-6">
           Start your journey today. Explore blogs, share your projects, or connect with like-minded innovators.

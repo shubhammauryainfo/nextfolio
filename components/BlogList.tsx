@@ -66,7 +66,7 @@ const BlogList: React.FC = () => {
             <span className="text-xl mb-2">{blog.title}</span>
             <p className="text-gray-600 text-center mb-4">{blog.description}</p>
             <Link href={`/blogs/${blog.slug}`}
-               className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700">
+               className="px-3 py-1 bg-gradient-to-r from-blue-500 to-teal-500 text-white rounded-lg shadow-md hover:bg-gradient-to-l transform transition duration-300 ease-in-out">
                 Read More
               
             </Link>

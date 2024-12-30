@@ -93,17 +93,17 @@ const ContactUs: React.FC = () => {
                                 <Link href="javascript:;" className="flex items-center mb-6">
                                    <IoCallOutline
                                    className="text-3xl text-blue-500"/>
-                                    <h5 className="text-black text-base font-normal leading-6 ml-5">470-601-1911</h5>
+                                    <h5 className="text-black text-base font-normal leading-6 ml-5">8828724893</h5>
                                 </Link>
                                 <Link href="javascript:;" className="flex items-center mb-6">
                                 <IoMailOpenOutline 
                                 className="text-3xl text-blue-500" />
-                                    <h5 className="text-black text-base font-normal leading-6 ml-5">Pagedone1234@gmail.com</h5>
+                                    <h5 className="text-black text-base font-normal leading-6 ml-5">nexbytes24x7@gmail.com</h5>
                                 </Link>
                                 <Link href="javascript:;" className="flex items-center">
                                < IoLocationOutline
                                 className="text-3xl text-blue-500" />
-                                    <h5 className="text-black text-base font-normal leading-6 ml-5">654 Sycamore Avenue, Meadowville, WA 76543</h5>
+                                    <h5 className="text-black text-base font-normal leading-6 ml-5">Gorai Naka Nallasopara East Palghar - 401209 .</h5>
                                 </Link>
                             </div>
                         </div>

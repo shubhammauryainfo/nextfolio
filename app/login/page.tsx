@@ -1,12 +1,18 @@
-"use client"; // Enables React hooks and client-side functionality
+"use client"; // Ensures client-side behavior
 
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-export default function Login() {
-  const [formData, setFormData] = useState({
+// Define the shape of the formData state
+interface FormData {
+  email: string;
+  password: string;
+}
+
+const Login = () => {
+  const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
   });
@@ -43,16 +49,27 @@ export default function Login() {
     });
 
     try {
-      const res = await fetch("/api/users", {
+      const res = await fetch("/api/login", { // Backend login endpoint (App Router API)
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "", // API key for backend authentication
         },
         body: JSON.stringify(formData),
       });
 
       if (res.ok) {
-       
+        const data = await res.json();
+
+        // Store the token in sessionStorage
+        sessionStorage.setItem("token", data.token);
+
+        // Store the user data in sessionStorage as well if needed
+        sessionStorage.setItem("user", JSON.stringify({
+          id: data.id,
+          name: data.name,
+          email: data.email,
+        }));
 
         // Show success alert
         Swal.fire({
@@ -65,7 +82,7 @@ export default function Login() {
 
         // Redirect to dashboard
         router.push("/dashboard");
-      } else if (res.status === 401 || res.status === 400) {
+      } else {
         const error = await res.json();
 
         // Show error alert for invalid credentials
@@ -82,14 +99,6 @@ export default function Login() {
           if (result.isConfirmed) {
             router.push("/signup");
           }
-        });
-      } else {
-        // Generic error for other status codes
-        Swal.fire({
-          title: "Error",
-          text: "An unexpected error occurred. Please try again later.",
-          icon: "error",
-          confirmButtonText: "OK",
         });
       }
     } catch (error) {
@@ -147,21 +156,6 @@ export default function Login() {
               placeholder="Enter your password"
             />
           </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember"
-                type="checkbox"
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="remember"
-                className="ml-2 text-sm text-gray-600"
-              >
-                Remember me
-              </label>
-            </div>
-          </div>
           <button
             type="submit"
             className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -180,4 +174,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;
