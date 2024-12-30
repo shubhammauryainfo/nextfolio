@@ -91,7 +91,7 @@ export default function BlogsPage() {
           </button>
           <button
             className="px-2 py-1 bg-red-500 text-white text-xl rounded hover:bg-red-600"
-            onClick={() => confirmDelete(row.slug)}
+            onClick={() => confirmDelete(row.slug , row.image_Url)}
           >
             <MdDeleteForever />
           </button>
@@ -121,111 +121,126 @@ export default function BlogsPage() {
     }
   };
 
-  function formatImageFilename(cloudinaryUrl: string): string {
-    const regex = /\/image\/upload\/v\d+\/(uploads\/[^\/]+)(?:\.[a-z]+)$/;
-    const match = cloudinaryUrl.match(regex);
-  
-    if (match && match[1]) {
-      return match[1]; // Return path without file extension
-    }
-  
-    return '';
+  // Utility function to format the image filename (same as before)
+function formatImageFilename(cloudinaryUrl: string): string {
+  const regex = /\/image\/upload\/v\d+\/(uploads\/[^\/]+)(?:\.[a-z]+)$/;
+  const match = cloudinaryUrl.match(regex);
+
+  if (match && match[1]) {
+    return match[1]; // Return path without file extension
   }
-  
+
+  return '';
+}
 
 
 
+// Function to delete the blog
+const deleteBlog = async (slug: string, imageUrl?: string): Promise<void> => {
+  try {
+    // Step 1: Delete the image if the image URL exists
+    if (imageUrl) {
+      const imageName = formatImageFilename(imageUrl);
+      console.log("Image Name:", imageName);
 
-  const deleteBlog = async (slug: string, image_Url?: string) => {
-    try {
-     
-      // Delete the image first if exists
-      if (image_Url) {
-        const imageName = formatImageFilename(image_Url);
-        console.log("Image Name:", imageName)
-        if (imageName) {
-          await fetch(`/api/upload/${imageName}`, {
+      if (imageName) {
+        const uploadResponse = await fetch(
+          `/api/upload/${imageName}`,
+          {
             method: "DELETE",
             headers: {
-              "x-api-key": apiKey || "", // Pass API key in headers
+              "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "", // Use a direct API key
             },
-          });
+          }
+        );
+
+        if (!uploadResponse.ok) {
+          throw new Error("Failed to delete the associated image file");
         }
       }
+    }
 
-      const response = await fetch(`/api/blogs/${slug}`, {
-        method: "DELETE",
-        headers: {
-          "x-api-key": apiKey || "", // Pass API key in headers
-        },
+    // Step 2: Delete the blog
+    const response = await fetch(`/api/blogs/${slug}`, {
+      method: "DELETE",
+      headers: {
+        "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "", 
+      },
+    });
+
+    // Step 3: Handle blog deletion success or failure
+    if (response.ok) {
+      // Update UI by removing the blog from data lists
+      setData((prevData) => prevData.filter((blog) => blog.slug !== slug));
+      setFilteredData((prevData) =>
+        prevData.filter((blog) => blog.slug !== slug)
+      );
+
+      // Show success notification
+      Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: "The blog has been deleted successfully.",
+        timer: 2000,
+        timerProgressBar: true,
       });
-
-      if (response.ok) {
-        setData((prevData) => prevData.filter((blog) => blog.slug !== slug));
-        setFilteredData((prevData) =>
-          prevData.filter((blog) => blog.slug !== slug)
-        );
-        Swal.fire({
-          icon: "success",
-          title: "Deleted!",
-          text: "The blog has been deleted successfully.",
-          timer: 2000,
-          timerProgressBar: true,
-        });
-      } else {
-        const errorText = await response.text();
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `Failed to delete the blog: ${errorText}`,
-        });
-      }
-    } catch (error) {
+    } else {
+      const errorText = await response.text();
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "An unexpected error occurred while deleting the blog.",
+        text: `Failed to delete the blog: ${errorText}`,
       });
-      console.error("Error deleting blog:", error);
     }
-  };
-
-  const confirmDelete = (slug: string, image_Url?: string) => {
+  } catch (error) {
+    // Handle any errors that occur during deletion
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteBlog(slug, image_Url);
-      }
+      icon: "error",
+      title: "Error",
+      text: "An unexpected error occurred while deleting the blog.",
     });
-  };
+    console.error("Error deleting blog:", error);
+  }
+};
 
-  const handleEdit = (blog: Blog) => {
-    setCurrentBlog(blog);
-    setFormValues({
-      title: blog.title,
-      content: blog.content,
-      author: blog.author,
-      category: blog.category,
-      tags: blog.tags,
-      image_Url: blog.image_Url || "",
-      metaTitle: blog.metaTitle || "",
-      metaDescription: blog.metaDescription || "",
-      slug: blog.slug,
-      keywords: blog.keywords,
-      canonicalUrl: blog.canonicalUrl || "",
-      publishedAt: blog.publishedAt ? format(new Date(blog.publishedAt), 'yyyy-MM-dd') : "",
-      updatedAt: blog.updatedAt ? format(new Date(blog.updatedAt), 'yyyy-MM-dd') : "",
-    });
-    setImage(null); // Reset image state when editing a blog
-    setIsModalOpen(true);
-  };
+// Function to confirm blog deletion with a warning popup
+const confirmDelete = (slug: string, imageUrl?: string): void => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Call the deleteBlog function if confirmed
+      deleteBlog(slug, imageUrl);
+    }
+  });
+};
+
+
+const handleEdit = (blog: Blog) => {
+  setCurrentBlog(blog);
+  setFormValues({
+    title: blog.title,
+    content: blog.content,
+    author: blog.author,
+    category: blog.category,
+    tags: blog.tags as any,
+    image_Url: blog.image_Url || "",
+    metaTitle: blog.metaTitle || "",
+    metaDescription: blog.metaDescription || "",
+    slug: blog.slug,
+    keywords: blog.keywords || [],
+    canonicalUrl: blog.canonicalUrl || "",
+    publishedAt: blog.publishedAt ? format(new Date(blog.publishedAt), 'yyyy-MM-dd') : "",
+  });
+  setImage(null); // Reset image state when editing a blog
+  setIsModalOpen(true);
+};
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const term = event.target.value.toLowerCase();
@@ -274,42 +289,76 @@ export default function BlogsPage() {
   const uploadImage = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    const response = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-      headers: {
-        "x-api-key": apiKey || "", // Pass API key in headers
-      },
-    });
-    if (response.ok) {
-      const { filePath } = await response.json();
-      return filePath;
-    } else {
-      throw new Error("Image upload failed");
+  
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "x-api-key": apiKey || "", // Pass API key in headers
+        },
+      });
+  
+      if (response.ok) {
+        const { filePath } = await response.json();
+        return filePath;
+      } else {
+        throw new Error("Image upload failed");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error;
     }
   };
-
+  
+  const deleteImage = async (imageUrl: string) => {
+    const imageName = formatImageFilename(imageUrl);
+  
+    try {
+      const response = await fetch(`/api/upload/${imageName}`, {
+        method: "DELETE",
+        headers: {
+          "x-api-key": apiKey || "", // Pass API key in headers
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to delete image");
+      }
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      throw error;
+    }
+  };
+  
   const addOrUpdateBlog = async () => {
     try {
       let imageUrl = formValues.image_Url;
-
+  
       // If a new image is uploaded, upload it and get the file path
       if (image) {
         imageUrl = await uploadImage(image);
       }
-
+  
+      // If editing and a new image is selected, delete the old image
+      if (currentBlog && currentBlog.image_Url && imageUrl !== currentBlog.image_Url) {
+        await deleteImage(currentBlog.image_Url);
+      }
+  
       const updatedFormValues = { ...formValues, image_Url: imageUrl };
-
+  
       const url = currentBlog ? `/api/blogs/${currentBlog.slug}` : "/api/blogs";
+      const method = currentBlog ? "PUT" : "POST";
+  
       const response = await fetch(url, {
-        method: currentBlog ? "PUT" : "POST",
+        method: method,
         headers: {
           "Content-Type": "application/json",
           "x-api-key": apiKey || "", // Pass API key in headers
         },
         body: JSON.stringify(updatedFormValues),
       });
-
+  
       if (response.ok) {
         Swal.fire({
           icon: "success",
@@ -318,8 +367,8 @@ export default function BlogsPage() {
           timer: 2000,
           timerProgressBar: true,
         });
-        fetchData();
-        closeModal();
+        fetchData(); // Reload blog data after success
+        closeModal(); // Close modal on success
       } else {
         const errorText = await response.text();
         Swal.fire({
@@ -461,7 +510,7 @@ export default function BlogsPage() {
                 <input
                   type="text"
                   value={formValues.tags.join(",")}
-                  onChange={(e) => setFormValues({ ...formValues, tags: e.target.value.split(",") })}
+                  onChange={(e) => setFormValues({ ...formValues, tags: e.target.value.split(",") as never[] })}
                   className="w-full px-4 py-2 border border-gray-300 rounded"
                 />
               </div>
@@ -482,7 +531,7 @@ export default function BlogsPage() {
                   type="file"
                   accept="image/*"
                   onChange={(e) => {
-                    if (e.target.files.length > 0) {
+                    if (e.target.files && e.target.files.length > 0) {
                       const file = e.target.files[0];
 
                       // Validate file size (max 400KB)
@@ -541,7 +590,7 @@ export default function BlogsPage() {
                 <input
                   type="text"
                   value={formValues.keywords ? formValues.keywords.join(",") : ""}
-                  onChange={(e) => setFormValues({ ...formValues, keywords: e.target.value.split(",") })}
+                  onChange={(e) => setFormValues({ ...formValues, keywords: e.target.value.split(",") as string[] })}
                   className="w-full px-4 py-2 border border-gray-300 rounded"
                 />
               </div>
