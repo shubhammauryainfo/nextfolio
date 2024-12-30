@@ -64,18 +64,18 @@ export default function BlogList(): JSX.Element {
   {loading ? (
     <p className="text-center text-gray-500">Loading blogs...</p>
   ) : blogs.length > 0 ? (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3  gap-6">
       {blogs.map((blog) => (
         <div
           key={blog.slug} // Ensure each child has a unique key
-          className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105"
+          className="bg-white rounded-lg shadow-lg w-4/5 overflow-hidden hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105"
         >
           <Image
             src={blog.image_Url}
             alt={blog.title}
             width={500}
             height={500}
-            className="object-cover rounded-t-lg"
+            className="object-cover w-full h-52 rounded-t-lg"
           />
           <div className="p-6">
             <h3 className="text-xl font-bold text-gray-800">

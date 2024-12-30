@@ -17,7 +17,7 @@ interface TableProps<T> {
 const Table = <T extends Record<string, any>>({
   columns,
   data,
-  rowsPerPage = 10, // Default value is 10
+  rowsPerPage = 11, // Default value is 10
 }: TableProps<T>) => {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,7 +43,7 @@ const Table = <T extends Record<string, any>>({
             {columns.map((column) => (
               <th
                 key={column.key}
-                className="px-4 py-2 border border-gray-300 font-semibold"
+                className="px-3 py-1 border border-gray-300 font-semibold"
                 style={{
                   width: column.width || "auto",
                   overflow: "hidden",
@@ -63,7 +63,7 @@ const Table = <T extends Record<string, any>>({
                 {columns.map((column) => (
                   <td
                     key={column.key}
-                    className="px-4 py-2 border border-gray-300"
+                    className="px-3 py-1 border border-gray-300"
                     style={{
                       width: column.width || "auto",
                       overflow: "hidden",
@@ -88,11 +88,11 @@ const Table = <T extends Record<string, any>>({
 
       {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div className="flex justify-center items-center mt-4">
+        <div className="flex ml-4 justify-start items-center mt-2">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 bg-green-300 text-gray-800 rounded-l hover:bg-green-400 disabled:bg-gray-200"
+            className="px-3 py-2 bg-green-300 text-gray-800 rounded-l hover:bg-green-400 disabled:bg-gray-200"
           >
           <GrLinkPrevious/>
           </button>
@@ -102,7 +102,7 @@ const Table = <T extends Record<string, any>>({
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-green-300 text-gray-800 rounded-r hover:bg-green-400 disabled:bg-gray-200"
+            className="px-3 py-2 bg-green-300 text-gray-800 rounded-r hover:bg-green-400 disabled:bg-gray-200"
           >
          <GrLinkNext/>
           </button>

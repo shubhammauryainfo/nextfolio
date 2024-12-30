@@ -25,7 +25,7 @@ interface Blog {
   slug: string;
   keywords: string[];
   canonicalUrl?: string;
-  publishedAt?: Date;
+  publishedAt: Date;
   updatedAt: Date;
 }
 
@@ -61,13 +61,13 @@ export default function BlogsPage() {
     {
       key: "publishedAt", 
       label: "Published At", 
-      render: (row: Blog) => row.publishedAt && isValidDate(row.publishedAt) ? format(new Date(row.publishedAt), 'Pp') : 'Invalid Date', 
+      render: (row: Blog) =>format(new Date(row.publishedAt), 'Pp'), 
       width: "20px"
     },
     {
       key: "updatedAt", 
       label: "Updated At", 
-      render: (row: Blog) => isValidDate(row.updatedAt) ? format(new Date(row.updatedAt), 'Pp') : 'Invalid Date', 
+      render: (row: Blog) => format(new Date(row.updatedAt), 'Pp'), 
       width: "20px"
     },
     {
@@ -100,9 +100,6 @@ export default function BlogsPage() {
     },
   ];
 
-  const isValidDate = (date: any) => {
-    return date instanceof Date && !isNaN(date.getTime());
-  };
 
   const fetchData = async () => {
     try {
@@ -124,11 +121,28 @@ export default function BlogsPage() {
     }
   };
 
+  function formatImageFilename(cloudinaryUrl: string): string {
+    const regex = /\/image\/upload\/v\d+\/(uploads\/[^\/]+)(?:\.[a-z]+)$/;
+    const match = cloudinaryUrl.match(regex);
+  
+    if (match && match[1]) {
+      return match[1]; // Return path without file extension
+    }
+  
+    return '';
+  }
+  
+
+
+
+
   const deleteBlog = async (slug: string, image_Url?: string) => {
     try {
+     
       // Delete the image first if exists
       if (image_Url) {
-        const imageName = image_Url.split("/").pop();
+        const imageName = formatImageFilename(image_Url);
+        console.log("Image Name:", imageName)
         if (imageName) {
           await fetch(`/api/upload/${imageName}`, {
             method: "DELETE",
@@ -241,8 +255,8 @@ export default function BlogsPage() {
           item.slug,
           item.author,
           item.image_Url,
-          item.publishedAt ? format(new Date(item.publishedAt), 'Pp') : 'Invalid Date',
-          item.updatedAt ? format(new Date(item.updatedAt), 'Pp') : 'Invalid Date',
+          format(new Date(item.publishedAt), 'Pp'),
+          format(new Date(item.updatedAt), 'Pp'),
         ]),
       ]
         .map((e) => e.join(","))

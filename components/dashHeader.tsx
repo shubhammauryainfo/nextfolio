@@ -7,7 +7,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-2 flex justify-between items-center">
         {/* Logo or Brand */}
         <Link href="/">
-          <h1 className="text-2xl font-bold">NEXTFOLIO</h1>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">NEXTFOLIO</h1>
         </Link>
          
 
