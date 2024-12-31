@@ -19,12 +19,12 @@ interface Blog {
   author: string;
   category: string;
   tags: string[];
-  image_Url?: string;
-  metaTitle?: string;
-  metaDescription?: string;
+  image_Url: string;
+  metaTitle: string;
+  metaDescription: string;
   slug: string;
   keywords: string[];
-  canonicalUrl?: string;
+  canonicalUrl: string;
   publishedAt: Date;
   updatedAt: Date;
 }
@@ -136,7 +136,7 @@ function formatImageFilename(cloudinaryUrl: string): string {
 
 
 // Function to delete the blog
-const deleteBlog = async (slug: string, imageUrl?: string): Promise<void> => {
+const deleteBlog = async (slug: string, imageUrl: string): Promise<void> => {
   try {
     // Step 1: Delete the image if the image URL exists
     if (imageUrl) {
@@ -204,7 +204,7 @@ const deleteBlog = async (slug: string, imageUrl?: string): Promise<void> => {
 };
 
 // Function to confirm blog deletion with a warning popup
-const confirmDelete = (slug: string, imageUrl?: string): void => {
+const confirmDelete = (slug: string, imageUrl: string): void => {
   Swal.fire({
     title: "Are you sure?",
     text: "You won't be able to revert this!",
@@ -222,7 +222,53 @@ const confirmDelete = (slug: string, imageUrl?: string): void => {
 };
 
 
+const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const term = event.target.value.toLowerCase();
+  setSearchTerm(term);
+  setFilteredData(
+    data.filter(
+      (blog) =>
+        blog.title.toLowerCase().includes(term) ||
+        blog.slug.toLowerCase().includes(term) ||
+        blog.author.toLowerCase().includes(term)
+    )
+  );
+};
+
+const clearSearch = () => {
+  setSearchTerm("");
+  setFilteredData(data);
+};
+
+const exportData = () => {
+  const csvContent =
+    "data:text/csv;charset=utf-8," +
+    [
+      ["Title", "Slug", "Author", "Image URL", "Published At", "Updated At"],
+      ...filteredData.map((item) => [
+        item.title,
+        item.slug,
+        item.author,
+        item.image_Url,
+        format(new Date(item.publishedAt), 'Pp'),
+        format(new Date(item.updatedAt), 'Pp'),
+      ]),
+    ]
+      .map((e) => e.join(","))
+      .join("\n");
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "blogs.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
 const handleEdit = (blog: Blog) => {
+  console.log(blog);
   setCurrentBlog(blog);
   setFormValues({
     title: blog.title,
@@ -242,49 +288,7 @@ const handleEdit = (blog: Blog) => {
   setIsModalOpen(true);
 };
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const term = event.target.value.toLowerCase();
-    setSearchTerm(term);
-    setFilteredData(
-      data.filter(
-        (blog) =>
-          blog.title.toLowerCase().includes(term) ||
-          blog.slug.toLowerCase().includes(term) ||
-          blog.author.toLowerCase().includes(term)
-      )
-    );
-  };
 
-  const clearSearch = () => {
-    setSearchTerm("");
-    setFilteredData(data);
-  };
-
-  const exportData = () => {
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      [
-        ["Title", "Slug", "Author", "Image URL", "Published At", "Updated At"],
-        ...filteredData.map((item) => [
-          item.title,
-          item.slug,
-          item.author,
-          item.image_Url,
-          format(new Date(item.publishedAt), 'Pp'),
-          format(new Date(item.updatedAt), 'Pp'),
-        ]),
-      ]
-        .map((e) => e.join(","))
-        .join("\n");
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "blogs.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
 
   const uploadImage = async (file: File) => {
     const formData = new FormData();
@@ -295,6 +299,7 @@ const handleEdit = (blog: Blog) => {
         method: "POST",
         body: formData,
         headers: {
+          "Content-Type": "multipart/form-data",
           "x-api-key": apiKey || "", // Pass API key in headers
         },
       });
